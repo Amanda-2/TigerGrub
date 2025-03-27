@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "4221fa4a-2874-43bf-8dd8-25272ad4163a"
+      }
+    },
+    "android": {
+      "package": "com.amanda02.tigergrub"
+    }
+  }
+}
