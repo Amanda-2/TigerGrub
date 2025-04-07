@@ -16,6 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "googleServicesFile":"./google-services.json",
       "package": "com.amanda02.TigerGrub"
     },
     "web": {
@@ -39,6 +40,7 @@
           "fonts": ["node_modules/@expo-google-fonts/irish-grover/IrishGrover_400Regular.ttf"]
         }
       ],
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true

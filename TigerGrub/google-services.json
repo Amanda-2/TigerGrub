@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "774238777295",
+    "project_id": "tigergrub",
+    "storage_bucket": "tigergrub.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774238777295:android:8032122fb48597095a6cba",
+        "android_client_info": {
+          "package_name": "com.amanda02.TigerGrub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774238777295-68f0vb1b8mq8kn6mlfmmkvalu1pnkp3j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amanda02.TigerGrub",
+            "certificate_hash": "85a9f6924eff685edb2ef78aa8425abd66f7f546"
+          }
+        },
+        {
+          "client_id": "774238777295-pu0bqtg84cog84j0kaghfnv8sht4detg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amanda02.TigerGrub",
+            "certificate_hash": "1396f1a82375c1d89d6ae9cdc25fe084322ba5c1"
+          }
+        },
+        {
+          "client_id": "774238777295-9c03v58qmr8t5v3v2dmj3c44j976lht6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaa0C_pjGIRT0Ug7ztLpRCsKpS8AeJmeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774238777295-9c03v58qmr8t5v3v2dmj3c44j976lht6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
