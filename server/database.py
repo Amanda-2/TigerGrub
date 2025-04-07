@@ -199,14 +199,15 @@ def get_options(queries):
                 "time_expires":result[4],
                 "message":result[5],
                 "provider":result[6],
-                "vegetarian":result[7],
-                "vegan":result[8],
-                "pescatarian":result[9],
-                "gluten_free":result[10],
+                "vegetarian":bool(result[7]),
+                "vegan":bool(result[8]),
+                "pescatarian":bool(result[9]),
+                "gluten_free":bool(result[10]),
                 "number_meals":result[11],
                 "meals_claimed":result[12],
                 "added_by_user":result[13],
-                "continuous":result[14]
+                "continuous":bool(result[14]),
+                "photo_links":result[15]
             }
             formated_results.append(new_dict)
 

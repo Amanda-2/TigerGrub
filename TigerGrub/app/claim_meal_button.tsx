@@ -44,7 +44,8 @@ export default function claim_meal_button(
             onPress={() => claim_meal()}>
             <Text 
             style={{
-                color:"white"
+                color:"white",
+                textAlign:"center"
             }}>Claim my meal!</Text>
             </Pressable>
         )

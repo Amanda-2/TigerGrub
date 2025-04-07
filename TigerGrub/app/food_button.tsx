@@ -18,7 +18,7 @@ export default function food_button(
             color:"white",
         },
         smallText: {
-            fontSize:10,
+            fontSize:12,
             textAlign: "left",
             paddingLeft: 5,
             color: "white"
@@ -57,13 +57,13 @@ export default function food_button(
                     flexDirection:"column",
                     paddingRight: 10,
                 }}>
-                    <Text>{meals_claimed}</Text>
-                    <View style={{height:1, width:'100%', backgroundColor:"black"}} />
-                    <Text>{number_meals}</Text>
+                    <Text style={[styles.smallText, {fontSize: 20}]}>{meals_claimed}</Text>
+                    <View style={{height:1, width:'100%', backgroundColor:"white"}} />
+                    <Text style={[styles.smallText, {fontSize: 20}]}>{number_meals}</Text>
                 </View>
                 <View style={{flexDirection:"column"}}>
-                    <Text>Meals</Text>
-                    <Text>Claimed</Text>
+                    <Text style={styles.smallText}>Meals</Text>
+                    <Text style={styles.smallText}>Claimed</Text>
                 </View>
                 
             </View>
@@ -71,8 +71,12 @@ export default function food_button(
         }
         else if (food_object["continuous"] != 1) {
             return (
-            <View>
-                <Text>{meals_claimed} Meals Claimed</Text>
+            <View
+            style={{
+                flexDirection:"row"
+            }}>
+                <Text style={[styles.smallText, {fontSize: 15}]}>{meals_claimed}</Text>
+                <Text style={[styles.smallText]}>Meals Claimed</Text>
             </View>
         )}
         else return
