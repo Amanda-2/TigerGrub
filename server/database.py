@@ -6,6 +6,29 @@ from random import randrange
 
 load_dotenv()
 
+def clean_database():
+    print("CLEANING DATABASE")
+    try:
+        
+        conn = get_connection()
+        with conn.cursor() as cursor:
+            now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+            delete_sql = """
+                DELETE FROM food_options
+                WHERE time_expires IS NOT NULL AND time_expires < %s
+            """
+
+            cursor.execute(delete_sql, (now, ))
+            conn.commit()
+        conn.close()
+
+        print("Cleaning database completed at ", now)
+
+    except Exception as e:
+        conn.close()
+        print("Cleaning failed due to : ", e)
+
 def run_sql():
     conn = get_connection()
 
@@ -38,7 +61,7 @@ def get_by_id(id):
         cursor.execute(message)
         results = cursor.fetchall()
     
-    return results[0]
+    return results
 
 def can_edit(id, editing_email):
     if editing_email == os.environ['ADMIN_EMAIL']:
@@ -64,7 +87,7 @@ def add(
     title: str,
     location: str,
     time_added: datetime,
-    time_expires: int,
+    time_expires: datetime,
     message: str,
     provider: str,
     vegetarian: bool,
@@ -82,6 +105,8 @@ def add(
         with conn.cursor() as cursor:
             exists = True
 
+            print("got here")
+
             while(exists == True):
                 id = randrange(100000, 1000000)
 
@@ -95,14 +120,20 @@ def add(
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
 
-            if time_expires != None:
-                expire_time = time_added + datetime.timedelta(minutes=time_expires)
-            else:
-                expire_time = time_expires
-            values = (id, title, location, time_added, expire_time, message, provider, vegetarian, vegan, pescatarian, gluten_free, number_meals, meals_claimed, added_by_user, continuous)
+            new_time_added = None
+            new_time_expires = None
+
+            if(time_added != None and time_expires != None):
+                new_time_added = datetime.datetime.fromisoformat(time_added.replace("Z", "+00:00"))
+                new_time_expires = datetime.datetime.fromisoformat(time_expires.replace("Z", "+00:00"))
+           
+            # if time_expires != None:
+            #     expire_time = time_added + datetime.timedelta(minutes=time_expires)
+            # else:
+            #     expire_time = time_expires
+            values = (id, title, location, new_time_added, new_time_expires, message, provider, vegetarian, vegan, pescatarian, gluten_free, number_meals, meals_claimed, added_by_user, continuous)
             cursor.execute(sql, values)
             conn.commit()
-            results = cursor.fetchall()
             conn.close()
             return ("success", id)
     except Exception as e:
