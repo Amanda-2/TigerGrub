@@ -9,7 +9,6 @@ from server import database
 app = Flask(__name__)
 
 CORS(app)
-app.debug = True
 
 @app.route("/api/delete_entry", methods=['POST'])
 def delete_entry():
@@ -119,6 +118,4 @@ def add_food():
         }), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
-    # threading.Thread(target=clean_database, daemon=True).start()
+    app.run()

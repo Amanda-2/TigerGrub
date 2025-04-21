@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Pressable, Text } from "react-native";
 import { get_items } from "./api_access";
+import stylesheet from "./styles";
 
 export default function claim_meal_button(
     food_object,
@@ -33,13 +34,7 @@ export default function claim_meal_button(
     if (food_object["continuous"] != 1) {
         return (
             <Pressable
-            style={{
-                borderRadius:5,
-                backgroundColor:"#33691E",
-                width: "auto",
-                height: "auto",
-                padding: 10
-            }}
+            style={stylesheet.buttons}
                 
             onPress={() => claim_meal()}>
             <Text 

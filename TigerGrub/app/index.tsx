@@ -1,4 +1,4 @@
-import { Button, Text, View, Pressable } from "react-native";
+import { Text, View, Pressable } from "react-native";
 import React, { useEffect, useState} from "react";
 import { TextInput, GestureHandlerRootView, FlatList } from "react-native-gesture-handler";
 import { Dimensions } from "react-native";
@@ -8,45 +8,43 @@ import DetailsModal from "./details_modal";
 import { filter_results } from "./api_access";
 import FilterModal from "./filter_modal";
 import stylesheet from "./styles"
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  isErrorWithCode,
-  isSuccessResponse,
-  statusCodes
-} from "@react-native-google-signin/google-signin"
-import auth from '@react-native-firebase/auth';
-// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import 'expo-dev-client';
+import { GoogleSignin, statusCodes } from 
+    '@react-native-google-signin/google-signin';
+import AddButton from "./add_button";
+import * as SecureStorage from "expo-secure-store"
+import LoginButton from "./login_button";
 
 export default function Index() {
-  const [userInfo, setUserInfo] = useState({})
+  useEffect(() => {
+    GoogleSignin.configure({
+        // Client ID of type WEB for server (needed
+        // to verify user ID and offline access)
+        webClientId: '774238777295-9c03v58qmr8t5v3v2dmj3c44j976lht6.apps.googleusercontent.com',
+    });
+}, [])
 
-  GoogleSignin.configure({
-    webClientId: "774238777295-9c03v58qmr8t5v3v2dmj3c44j976lht6.apps.googleusercontent.com",
-  });
+  const [user, setUser] = useState<string>("")
 
-  const onGoogleButtonPress = async () => {
-    // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const signInResult = await GoogleSignin.signIn();
-  
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(signInResult.data.idToken);
-  
-    // Sign-in the user with the credential
-    // return auth().signInWithCredential(googleCredential);
-    const user_sign_in = auth().signInWithCredential(googleCredential);
-    user_sign_in.then((user) => console.log(user))
-      .catch((error) => {
-        console.log(error);
-      })
-  }
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userData = await SecureStorage.getItemAsync("user");
+        if (userData) {
+          setUser(userData)
+        }
+      } catch(error) {
+        console.log("Failed to load previous signin session: ", error)
+      }
+    }
+
+    loadUser();
+  }, []);
 
   const width = Dimensions.get('window').width;
-  // const length = Dimensions.get('window').length;
   const [items, setItems] = useState<React.JSX.Element[]>([]);
   const [modalObject, setModalObject] = useState({})
+  const [addModalOpen, setAddModalOpen] = useState(false)
   const [filters, setFilters] = useState({
     "id":null,
     "title":"",
@@ -78,6 +76,7 @@ export default function Index() {
         backgroundColor: "#FFE0CE"
       }}
     >
+      <LoginButton user={user} setUser={setUser}/>
       <TextInput
         style={{
           height:40,
@@ -95,11 +94,7 @@ export default function Index() {
           setSearchQuery(text)
         }}></TextInput>
 
-    <Button
-      title="Google Sign-In"
-      onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
-    />
-
+      <AddButton user={user} addModalOpen={addModalOpen} setAddModalOpen={setAddModalOpen} setItems={setItems}></AddButton>
       <Text
       style={{
         fontFamily:"Courier New",
@@ -115,7 +110,7 @@ export default function Index() {
 
       <FilterModal filters={filters} setFilters={setFilters} filterModalVisible={filterModalVisible} setFilterModalVisible={setFilterModalVisible}></FilterModal>
       
-      <DetailsModal modalObject={modalObject} setModalObject={setModalObject} setItems={setItems}/>
+      <DetailsModal modalObject={modalObject} setModalObject={setModalObject} setItems={setItems} user={user}/>
 
       <FlatList
       data={filter_results(items, filters, searchQuery)}

@@ -1,30 +1,17 @@
-import { View, Modal, Text, StyleSheet, Image } from "react-native"
+import { View, Modal, Text, StyleSheet, Image, Pressable } from "react-native"
 import PropTypes from 'prop-types'
 import claim_meal_button from './claim_meal_button'
 import moment from 'moment';
 import { ScrollView } from "react-native-gesture-handler";
+import { delete_entry } from "./api_access";
+import stylesheet from "./styles"
 
 export default function DetailsModal({
     modalObject,
     setModalObject,
-    setItems
+    setItems,
+    user
 }) {
-
-    const styles = StyleSheet.create({
-        titleText: {
-            fontSize: 20,
-            textAlign: "left",
-            paddingLeft: 5,
-            paddingTop: 5,
-            color:"white",
-        },
-        smallText: {
-            fontSize:15,
-            textAlign: "left",
-            paddingLeft: 5,
-            color: "white"
-        }
-    })
 
     const format = (number_meals, meals_claimed) => {
         if (number_meals != null) {
@@ -37,13 +24,13 @@ export default function DetailsModal({
                     flexDirection:"column",
                     paddingRight: 10,
                 }}>
-                    <Text style={styles.smallText}>{meals_claimed}</Text>
+                    <Text style={stylesheet.smallText}>{meals_claimed}</Text>
                     <View style={{height:1, width:'100%', backgroundColor:"white"}} />
-                    <Text style={styles.smallText}>{number_meals}</Text>
+                    <Text style={stylesheet.smallText}>{number_meals}</Text>
                 </View>
                 <View style={{flexDirection:"column"}}>
-                    <Text style={styles.smallText}>Meals</Text>
-                    <Text style={styles.smallText}>Claimed</Text>
+                    <Text style={stylesheet.smallText}>Meals</Text>
+                    <Text style={stylesheet.smallText}>Claimed</Text>
                 </View>
                 
             </View>
@@ -55,15 +42,14 @@ export default function DetailsModal({
                 style={{
                 flexDirection:"row"
             }}>
-                <Text style={[styles.smallText, {fontSize: 15}]}>{meals_claimed}</Text>
-                <Text style={[styles.smallText]}>Meals Claimed</Text>
+                <Text style={[stylesheet.smallText, {fontSize: 15}]}>{meals_claimed}</Text>
+                <Text style={[stylesheet.smallText]}>Meals Claimed</Text>
             </View>
         )}
         else return
     }
 
     const get_time_difference = (time) => {
-            console.log(time)
             const now = moment();
             const time_added = moment(time);
     
@@ -71,7 +57,6 @@ export default function DetailsModal({
                 if (modalObject["continuous"] == 1) {
                     return "Repeated Event. Click for details."
                 } else {
-                    console.log(time_added)
                     return "!ERROR! Please contact administrator."
                 }
             }
@@ -97,6 +82,7 @@ export default function DetailsModal({
             visible={Object.keys(modalObject).length != 0}
             onRequestClose={() => setModalObject({})}
         >
+            <View style={stylesheet.modalBackground}>
             <ScrollView>
             <View
                 style={{
@@ -104,17 +90,17 @@ export default function DetailsModal({
                     padding:20,
                 }}
             >
-                <Text style={[styles.titleText, {textAlign:"center", alignSelf:"center"}]}>{modalObject.title}</Text>
-                <Text style={[styles.titleText, {textAlign:"center"}]}>{format(modalObject["number_meals"], modalObject["meals_claimed"])}</Text>
-                <Text style={styles.smallText}>{get_time_difference(modalObject["time_added"])}</Text>
-                <Text style={styles.smallText}>Located at {modalObject.location}</Text>
-                <Text style={styles.smallText}>Courtesy of {modalObject.provider}</Text>
-                <Text style={styles.smallText}>Vegetarian: {String(modalObject.vegetarian)}</Text>
-                <Text style={styles.smallText}>Vegan: {String(modalObject.vegan)}</Text>
-                <Text style={styles.smallText}>Pescatarian: {String(modalObject.pescatarian)}</Text>
-                <Text style={styles.smallText}>Gluten Free: {String(modalObject.gluten_free)}</Text>
-                <Text style={styles.smallText}>{modalObject.continuous ? "Repeated Event" : ""}</Text>
-                <Text style={styles.smallText}>{modalObject.message}</Text>
+                <Text style={[stylesheet.titleText, {textAlign:"center", alignSelf:"center"}]}>{modalObject.title}</Text>
+                <Text style={[stylesheet.titleText, {textAlign:"center"}]}>{format(modalObject["number_meals"], modalObject["meals_claimed"])}</Text>
+                <Text style={stylesheet.smallText}>{get_time_difference(modalObject["time_added"])}</Text>
+                <Text style={stylesheet.smallText}>Located at {modalObject.location}</Text>
+                <Text style={stylesheet.smallText}>Courtesy of {modalObject.provider}</Text>
+                <Text style={stylesheet.smallText}>Vegetarian: {String(modalObject.vegetarian)}</Text>
+                <Text style={stylesheet.smallText}>Vegan: {String(modalObject.vegan)}</Text>
+                <Text style={stylesheet.smallText}>Pescatarian: {String(modalObject.pescatarian)}</Text>
+                <Text style={stylesheet.smallText}>Gluten Free: {String(modalObject.gluten_free)}</Text>
+                <Text style={stylesheet.smallText}>{modalObject.continuous ? "Repeated Event" : ""}</Text>
+                <Text style={stylesheet.smallText}>{modalObject.message}</Text>
                 
                 <View
                 style={{
@@ -124,7 +110,22 @@ export default function DetailsModal({
                     {renderPhotos()}
                 </View>
                 {claim_meal_button(modalObject, setItems)}
-            </View></ScrollView>
+                {user && user === modalObject["added_by_user"] && (
+                    <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 20 }}>
+                
+                    <Pressable
+                      onPress={() => {
+                        delete_entry(modalObject["id"], setItems)
+                        setModalObject({})
+                      }}
+                      style={[stylesheet.buttons, {backgroundColor: "#D32F2F"}]}
+                    >
+                      <Text style={{ textAlign: "center", color: "white" }}>Delete</Text>
+                    </Pressable>
+                  </View>
+                
+                )}
+            </View></ScrollView></View>
             
         </Modal>
     )

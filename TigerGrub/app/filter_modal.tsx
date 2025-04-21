@@ -1,7 +1,6 @@
 import { View, Modal, Text, StyleSheet, Image, Pressable } from "react-native"
 import PropTypes from 'prop-types'
-import claim_meal_button from './claim_meal_button'
-import moment from 'moment';
+import stylesheet from "./styles";
 import { ScrollView, Switch } from "react-native-gesture-handler";
 
 export default function FilterModal({
@@ -10,31 +9,8 @@ export default function FilterModal({
     filterModalVisible,
     setFilterModalVisible
 }) {
-    const styles = StyleSheet.create({
-        titleText: {
-            fontSize: 20,
-            textAlign: "left",
-            paddingLeft: 5,
-            paddingTop: 5,
-            color:"white",
-        },
-        smallText: {
-            fontSize:15,
-            textAlign: "left",
-            paddingLeft: 5,
-            color: "white"
-        },
-        row: {
-            flexDirection: "row",
-            justifyContent:"space-between",
-            alignItems: "center",
-            marginVertical: 10
-        },
-    })
-    console.log(filters)
 
     const handle_change = (key) => {
-        console.log(filters)
         setFilters(previous => ({...previous, [key]: !previous[key]}));
     }
 
@@ -46,8 +22,8 @@ export default function FilterModal({
             {label: "Gluten Free", key:"gluten_free"},
             {label: "Repeated Events Only", key:"continuous"}
         ].map(({label, key}) => (
-            <View key={key} style={styles.rows}>
-                <Text style={styles.smallText}>{label}</Text>
+            <View key={key} style={stylesheet.row}>
+                <Text style={stylesheet.smallText}>{label}</Text>
                 <Switch value={filters[key]}
                 onValueChange={() => handle_change(key)}></Switch>
             </View>
@@ -61,12 +37,13 @@ export default function FilterModal({
             visible={filterModalVisible}
             onRequestClose={() => setFilterModalVisible(false)}
         >
+            <View style={stylesheet.modalBackground}>
             <ScrollView
             style={{
                 backgroundColor:"#90B874",
                 padding:20,
             }}>
-                <Text style={styles.titleText}>Filters</Text>
+                <Text style={stylesheet.titleText}>Filters</Text>
                 {format_filters()}
 
             <Pressable
@@ -85,7 +62,7 @@ export default function FilterModal({
                     }}>Apply Filters</Text>
             </Pressable>
             </ScrollView>
-
+            </View>
         </Modal>
     )
 }

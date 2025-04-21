@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile":"./google-services.json",
+      "googleServicesFile": "./google-services.json",
       "package": "com.amanda02.TigerGrub"
     },
     "web": {
@@ -36,11 +36,15 @@
         }
       ],
       [
-        "expo-font", {
-          "fonts": ["node_modules/@expo-google-fonts/irish-grover/IrishGrover_400Regular.ttf"]
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/irish-grover/IrishGrover_400Regular.ttf"
+          ]
         }
       ],
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

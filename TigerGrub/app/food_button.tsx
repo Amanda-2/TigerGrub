@@ -26,7 +26,6 @@ export default function food_button(
     })
 
     const get_time_difference = (time) => {
-        console.log(time)
         const now = moment();
         const time_added = moment(time);
 
@@ -34,7 +33,6 @@ export default function food_button(
             if (food_object["continuous"] == 1) {
                 return "Repeated Event. Click for details."
             } else {
-                console.log(time_added)
                 return "!ERROR! Please contact administrator."
             }
         }
